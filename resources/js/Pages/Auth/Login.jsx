@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Checkbox from '@/Components/Checkbox';
 import GuestLayout from '@/Layouts/GuestLayout';
 import InputError from '@/Components/InputError';
@@ -97,12 +97,15 @@ export default function Login({ status, canResetPassword }) {
             </form>
 
             {/* firebase login */}
-            <CustomLogin />
+            {/* <CustomLogin /> */}
         </GuestLayout>
     );
 }
 
 const CustomLogin = () => {
+    
+    const [isLogged, setIsLogged] = useState(false);
+    
     const handleGoogleLogin = () => {
         const provider = new GoogleAuthProvider();
         signInWithPopup(auth, provider)
@@ -112,12 +115,14 @@ const CustomLogin = () => {
                 const user = result.user;
                 console.log(token);
                 console.log(user);
+                setIsLogged(true);
             }).catch((error) => {
                 const credential = GoogleAuthProvider.credentialFromError(error);
                 const errorCode = error.code;
                 const errorMessage = error.message;
                 const email = error.customData.email;
-                console.log(errorMessage);
+                // console.log(errorMessage);
+                setIsLogged(false);
             });
         ;
     };

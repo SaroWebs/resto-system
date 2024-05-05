@@ -63,8 +63,14 @@ class CategoryController extends Controller
         //
     }
 
-    public function get_items(){    
-        $c = Category::get();
+    public function get_items(Request $request){   
+        // order, limit, page, pagination 
+        $c = Category::paginate();
+        return response()->json($c);
+    }
+    
+    public function get_item($id){    
+        $c = Category::find($id);
         return response()->json($c);
     }
 }

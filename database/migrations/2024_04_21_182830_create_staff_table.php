@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('staff', function (Blueprint $table) {
-            $table->id();$table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->enum('position',['waiter', 'chef', 'manager'])->default('waiter');
             $table->boolean('active')->default(1);
             $table->timestamps();

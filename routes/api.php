@@ -2,21 +2,19 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MenuController;
+use App\Http\Controllers\SeatController;
 use App\Http\Controllers\CategoryController;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
-
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
 Route::get('/categories', [CategoryController::class, 'get_items']);
+Route::get('/category/{id}', [CategoryController::class, 'get_item']);
+
+Route::get('/menus', [MenuController::class, 'get_items']);
+Route::get('/menu/{id}', [MenuController::class, 'get_item']);
+
+Route::get('/seats', [SeatController::class, 'get_items']);
+Route::get('/seat/{id}', [SeatController::class, 'get_item']);
+
+// banner, review(menu_id)
+// secured individual user
+// personal info, reservation, notification, cart,  order

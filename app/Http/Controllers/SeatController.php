@@ -62,4 +62,15 @@ class SeatController extends Controller
     {
         //
     }
+
+    public function get_items(Request $request){   
+        // order, limit, page, pagination 
+        $s = Seat::paginate();
+        return response()->json($s);
+    }
+    
+    public function get_item($id){    
+        $s = Seat::find($id);
+        return response()->json($s);
+    }
 }
