@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->text('message');
-            $table->boolean('is_read');
+            $table->string('title');
+            $table->text('message')->nullable();
+            $table->string('url')->nullable();
+            $table->boolean('is_read')->default(0);
             $table->timestamps();
         });
     }

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
             $table->foreignId('menu_id')->constrained('menus');
-            $table->enum('rating', [1, 2, 3, 4, 5]);
+            $table->enum('rating', [0, 1, 2, 3, 4, 5]);
             $table->text('comment')->nullable();
             $table->foreignId('user_id')->nullable()->constrained('users');
             $table->timestamps();

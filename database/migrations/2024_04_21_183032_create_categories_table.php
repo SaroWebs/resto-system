@@ -16,7 +16,14 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('image_url')->nullable();
+            $table->string('icon_url')->nullable();
+            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->foreign('parent_id')
+                ->references('id')
+                ->on('categories')
+                ->onDelete('cascade');
             $table->boolean('active')->default(1);
+            $table->boolean('is_root')->default(0);
             $table->timestamps();
         });
     }

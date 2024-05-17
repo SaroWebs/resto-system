@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('seats', function (Blueprint $table) {
             $table->id();
             $table->string('table_number');
-    $table->integer('capacity');
-    $table->boolean('is_available');
+            $table->integer('capacity');
+            $table->boolean('is_available')->default(1);
             $table->timestamps();
         });
     }

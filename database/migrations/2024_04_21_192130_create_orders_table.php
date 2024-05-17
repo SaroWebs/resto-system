@@ -17,8 +17,14 @@ return new class extends Migration
             $table->date('order_date');
             $table->time('order_time');
             $table->enum('status', ['pending', 'confirmed', 'completed', 'cancelled']);
-            $table->enum('suggested_diets', ['low_carb', 'vegetarian', 'vegan', 'gluten_free', 'dairy_free'])->nullable();
+            $table->enum('suggested_diets', [
+                'low_carb', 'vegetarian', 'vegan', 'gluten_free', 'dairy_free',
+                'paleo', 'keto', 'mediterranean', 'pescatarian', 'whole30',
+                'raw_food', 'low_fat', 'nut_free', 'soy_free', 'shellfish_free',
+                'halal', 'kosher', 'fodmap'
+            ])->nullable();
             $table->text('special_requests')->nullable();
+            $table->boolean('home_delivery')->default(0);
             $table->timestamps();
         });
     }

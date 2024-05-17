@@ -15,13 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('description')->nullable();
-            $table->decimal('price', 8, 2)->default(0);
+            $table->decimal('price', 10, 2)->default(0);
+            $table->decimal('discount', 4, 2)->default(0);
             $table->foreignId('category_id')->constrained('categories');
             $table->boolean('is_available')->default(1);
             $table->integer('calories')->nullable();
             $table->text('ingredients')->nullable();
-            $table->integer('cooking_time')->nullable(); // minutes
-            $table->boolean('is_trending')->default(0);
+            $table->integer('cooking_time')->nullable();
             $table->timestamps();
         });
     }

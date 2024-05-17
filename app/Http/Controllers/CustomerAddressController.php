@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Inertia\Inertia;
-use App\Models\Category;
+use App\Models\CustomerAddress;
 use Illuminate\Http\Request;
 
-class CategoryController extends Controller
+class CustomerAddressController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return Inertia::render('Welcome');
+        //
     }
 
     /**
@@ -35,7 +34,7 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Category $category)
+    public function show(CustomerAddress $customerAddress)
     {
         //
     }
@@ -43,7 +42,7 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Category $category)
+    public function edit(CustomerAddress $customerAddress)
     {
         //
     }
@@ -51,7 +50,7 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Category $category)
+    public function update(Request $request, CustomerAddress $customerAddress)
     {
         //
     }
@@ -59,18 +58,8 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $category)
+    public function destroy(CustomerAddress $customerAddress)
     {
         //
-    }
-
-    public function get_items(){
-        $c = Category::get();
-        return response()->json($c);
-    }
-    
-    public function get_item($id){    
-        $c = Category::find($id);
-        return response()->json($c);
     }
 }

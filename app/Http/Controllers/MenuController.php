@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Menu;
+use Inertia\Inertia;
 use Illuminate\Http\Request;
 
 class MenuController extends Controller
@@ -12,7 +13,7 @@ class MenuController extends Controller
      */
     public function index()
     {
-        //
+        return Inertia::render('Product/List');
     }
 
     /**

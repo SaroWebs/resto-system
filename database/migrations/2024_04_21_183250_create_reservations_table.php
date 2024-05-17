@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->date('date');
             $table->time('time');
-            $table->integer('party_size');
-            $table->enum('status', ['pending', 'confirmed', 'cancelled']);
+            $table->integer('party_size')->default(1);
+            $table->enum('status', ['pending', 'confirmed', 'cancelled', 'completed']);
             $table->text('special_requests')->nullable();
             $table->foreignId('table_id')->constrained('seats');
             $table->timestamps();
