@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { RiMenu2Fill } from "react-icons/ri";
 import { AiOutlineClose } from "react-icons/ai";
@@ -7,9 +7,17 @@ import { FiSearch } from "react-icons/fi";
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import { Link } from '@inertiajs/react';
 import DropdownNotification from '../Dropdown/Notification';
+import UserAccount from '../Dropdown/UserAccount';
 
 const Header = (props) => {
-    const { sidebarOpen, setSidebarOpen } = props;
+    const { sidebarOpen, setSidebarOpen, auth } = props;
+
+    useEffect(() => {
+      if(!auth.user){
+        return 'this page is intended for logged in user only.. ';
+      }
+    }, [auth])
+    
     return (
         <header className="sticky top-0 z-50 flex w-full bg-white shadow-sm">
             <div className="flex flex-grow items-center justify-between px-4 py-4 shadow-2 md:px-6 2xl:px-11">
@@ -47,7 +55,7 @@ const Header = (props) => {
                         <DropdownNotification/>
                         <li>message</li>
                     </ul>
-                    <span>Logged user</span>
+                    <UserAccount user={auth.user}/>
                 </div>
             </div>
         </header>

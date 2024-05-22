@@ -122,7 +122,7 @@ const Sidebar = (props) => {
                                             <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
                                                 <li>
                                                     <Link
-                                                        href="/"
+                                                        href="/dashboard"
                                                         className={({ isActive }) =>
                                                             'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
                                                             (isActive && '!text-white')
@@ -133,7 +133,7 @@ const Sidebar = (props) => {
                                                 </li>
                                                 <li>
                                                     <Link
-                                                        href="/"
+                                                        href="/dashboard"
                                                         className={({ isActive }) =>
                                                             'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
                                                             (isActive && '!text-white')
@@ -153,7 +153,7 @@ const Sidebar = (props) => {
                                 {(handleClick, open) => (
                                     <Fragment>
                                         <Link href="#"
-                                            className={`group relative flex items-center gap-2 rounded-sm px-4 py-2 text-md font-medium text-slate-800 duration-300 ease-in-out hover:bg-slate-300 ${pathname.includes('product-management') && 'bg-red-500 text-white'}`}
+                                            className={`group relative flex items-center gap-2 rounded-sm px-4 py-2 text-md font-medium text-slate-800 duration-300 ease-in-out hover:bg-slate-300 ${(pathname.includes('products') || pathname.includes('categories') ) && 'bg-red-500 text-white'}`}
                                             onClick={(e) => {
                                                 e.preventDefault();
                                                 handleClick();

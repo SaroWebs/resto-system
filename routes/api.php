@@ -6,6 +6,8 @@ use App\Http\Controllers\MenuController;
 use App\Http\Controllers\SeatController;
 use App\Http\Controllers\CategoryController;
 
+
+// front end
 Route::get('/categories', [CategoryController::class, 'get_items']);
 Route::get('/category/{id}', [CategoryController::class, 'get_item']);
 
@@ -18,3 +20,7 @@ Route::get('/seat/{id}', [SeatController::class, 'get_item']);
 // banner, review(menu_id)
 // secured individual user
 // personal info, reservation, notification, cart,  order
+
+// system
+
+Route::get('/getproducts', [MenuController::class, 'get_products']);

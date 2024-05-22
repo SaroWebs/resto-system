@@ -58,7 +58,7 @@ const DropdownNotification = () => {
                 className="relative flex h-10 w-10 items-center justify-center rounded-full border-[0.5px] border-stroke bg-gray hover:text-primary"
             >
                 <span
-                    className={`absolute -top-0.5 right-0 z-1 h-2 w-2 rounded-full bg-meta-1 ${notifying === false ? 'hidden' : 'inline'
+                    className={`absolute -top-0.5 right-0 z-1 h-2 w-2 rounded-full bg-red-500 ${notifying === false ? 'hidden' : 'inline'
                         }`}
                 >
                     <span className="absolute -z-1 inline-flex h-full w-full animate-ping rounded-full bg-meta-1 opacity-75"></span>
@@ -89,7 +89,7 @@ const DropdownNotification = () => {
                     <h5 className="text-md font-medium text-slate-600">Notification</h5>
                 </div>
                 <ul className="flex h-auto flex-col overflow-y-auto">
-                    {notifications.length < 0 ? notifications.map((notification, i) => (
+                    {notifications.length > 0 ? notifications.map((notification, i) => (
                         <li key={i}>
                             <Link
                                 className="flex flex-col gap-2 border-t border-stroke px-4 py-3 hover:bg-gray-2"

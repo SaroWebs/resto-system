@@ -41,10 +41,19 @@ Route::middleware('auth')->group(function () {
     Route::get('/categories', [CategoryController::class, 'index']);
     Route::get('/products', [MenuController::class, 'index']);
 
-
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::middleware('auth')->group(function () {
+    // category 
+    Route::post('/category/store',[CategoryController::class, 'store']);
+    Route::put('/category/{id}/update',[CategoryController::class, 'update']);
+    Route::delete('/category/{id}',[CategoryController::class, 'destroy']);
+
+    
+});
+
 
 require __DIR__.'/auth.php';

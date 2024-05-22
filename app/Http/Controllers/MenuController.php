@@ -66,6 +66,12 @@ class MenuController extends Controller
 
 
 
+    public function get_products(Request $request){   
+        // order, limit, page, pagination 
+        $m = Menu::with('images')->paginate(50);
+        return response()->json($m);
+    }
+
     public function get_items(Request $request){   
         // order, limit, page, pagination 
         $m = Menu::with('images')->paginate(50);
