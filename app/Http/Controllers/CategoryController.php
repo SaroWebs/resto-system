@@ -55,7 +55,7 @@ class CategoryController extends Controller
         $c->description = $request->description ?? '';
         $c->image_url = $imageUrl;
         $c->icon_url = $iconUrl;
-        $c->parent_id = $parent ? $request->parent_id : '';
+        $c->parent_id = $parent ? $request->parent_id : null;
         $c->is_root = $request->is_root;
         $c->active = $request->active;
         $c->created_at = now();
@@ -89,6 +89,16 @@ class CategoryController extends Controller
         //
     }
 
+    public function updateStatus(Request $request, Category $category)
+    {
+        if (!$category) {
+            return response()->json(["message" => "not found"], 404);
+        }
+        $category->active = $request->active ? 0 : 1;
+        $category->update();
+        return response()->json(["message" => "Updated", 'cat'=> $category], 200);
+    }
+
     /**
      * Remove the specified resource from storage.
      */
@@ -99,7 +109,7 @@ class CategoryController extends Controller
 
     public function get_items()
     {
-        $c = Category::get();
+        $c = Category::paginate(10);
         return response()->json($c);
     }
 

@@ -50,6 +50,7 @@ Route::middleware('auth')->group(function () {
     // category 
     Route::post('/category/store',[CategoryController::class, 'store']);
     Route::put('/category/{id}/update',[CategoryController::class, 'update']);
+    Route::put('/category/{category}/updatestatus',[CategoryController::class, 'updateStatus']);
     Route::delete('/category/{id}',[CategoryController::class, 'destroy']);
 
     
