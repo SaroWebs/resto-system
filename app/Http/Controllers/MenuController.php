@@ -71,6 +71,7 @@ class MenuController extends Controller
         $order_by = $request->input('order_by', 'name');
         $per_page = $request->input('per_page', 50);
         $search = $request->input('search','');
+        $cat_id = $request->input('category_id','');
        
         $query = Menu::query();
 
@@ -78,6 +79,10 @@ class MenuController extends Controller
             $query->where('name','like','%'.$search.'%')
                 ->orWhere('description','like','%'.$search.'%');
         }
+        if (!empty($cat_id)) {
+            $query->where('category_id', $cat_id);
+        }
+        
         $query->orderBy($order_by, $order);
 
         $m = $query->with('images')->paginate($per_page);
