@@ -67,8 +67,20 @@ class MenuController extends Controller
 
 
     public function get_products(Request $request){   
-        // order, limit, page, pagination 
-        $m = Menu::with('images')->paginate(50);
+        $order = $request->input('order', 'asc');
+        $order_by = $request->input('order_by', 'name');
+        $per_page = $request->input('per_page', 50);
+        $search = $request->input('search','');
+       
+        $query = Menu::query();
+
+        if (!empty($search)) {
+            $query->where('name','like','%'.$search.'%')
+                ->orWhere('description','like','%'.$search.'%');
+        }
+        $query->orderBy($order_by, $order);
+
+        $m = $query->with('images')->paginate($per_page);
         return response()->json($m);
     }
 
