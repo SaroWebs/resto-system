@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('menu_id')->constrained('menus');
             $table->integer('quantity')->default(1);
             $table->string('size')->nullable();
+            $table->string('requirement')->nullable();
             $table->timestamps();
         });
     }

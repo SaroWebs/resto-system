@@ -1,8 +1,12 @@
 import MainLayout from '@/Layouts/MainLayout';
+import { Dialog } from 'primereact/dialog'
 import { Head } from '@inertiajs/react';
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react'
 import { IoMdCloseCircleOutline } from "react-icons/io";
+import AddNewForm from './AddNewForm';
+import { ConfirmPopup, confirmPopup } from 'primereact/confirmpopup';
+import { Button } from 'primereact/button';
 
 const CategoriesList = (props) => {
 
@@ -16,9 +20,7 @@ const CategoriesList = (props) => {
         <MainLayout {...props}>
             <Head title="Categories" />
             <div className="container p-4">
-                {view.screen == 'list' && <Items {...props} setView={setView} />}
-                {view.screen == 'view' && <SingleItem {...props} id={view.target_id} setView={setView} />}
-                {view.screen == 'add_new' && <AddNewForm {...props} setView={setView} />}
+                <Items {...props} setView={setView} />
             </div>
         </MainLayout>
     )
@@ -60,7 +62,7 @@ const Items = (props) => {
         <div className="">
             <div className="flex justify-between p-2 border">
                 <h4 className="text-3xl text-slate-400">Categories</h4>
-                <button onClick={() => props.setView({ screen: 'add_new', target_id: '' })} className='py-2 px-4 bg-pink-600 text-white'>Add new</button>
+                <CreateItem />
             </div>
 
 
@@ -83,27 +85,21 @@ const Items = (props) => {
                             <tbody>
                                 {categories.data.map((category, i) => (
                                     <tr key={i}>
-                                        <td  className='text-center'>{i + 1}</td>
-                                        <td  className='flex justify-center items-start'>
-                                            <img className='w-16' src={category.image_url} alt="" />
-                                        </td>
-                                        <td  className='text-center'>{category.name}</td>
+                                        <td className='text-center'>{i + 1}</td>
                                         <td className='flex justify-center items-start'>
-                                            <img className='w-12' src={category.icon_url} alt="" />
+                                            <img className='w-12' src={category.image_url} alt="" />
+                                        </td>
+                                        <td className='text-center'>{category.name}</td>
+                                        <td className='flex justify-center items-start'>
+                                            <img className='w-8' src={category.icon_url} alt="" />
                                         </td>
                                         <td className='text-center'>
                                             {category.parent_id ? categories.data.filter(cat => cat.id == category.id)[0].name : ""}
                                         </td>
-                                        <td className='flex gap-2 text-sm justify-center items-start'>
-                                            <div className="switch">
-                                                <Switcher is_active={category.active} handleToggle={() => handleToggle(category.id)} />
-                                            </div>
-                                            <div className="edit">
-                                                <button onClick={() => {
-                                                    props.setView({ screen: 'view', target_id: category.id })
-                                                }}>View</button>
-                                            </div>
-                                            <div className="switch">Delete</div>
+                                        <td className='flex gap-2 text-sm justify-center items-center py-2'>
+                                            <Switcher is_active={category.active} handleToggle={() => handleToggle(category.id)} />
+                                            <EditItem category={category} />
+                                            <DeleteItem category={category}/>
                                         </td>
                                     </tr>
                                 ))}
@@ -120,8 +116,6 @@ const Items = (props) => {
 
         </div>
     )
-
-
 }
 
 
@@ -135,287 +129,125 @@ const Switcher = ({ is_active, handleToggle }) => {
     );
 }
 
+const EditItem = (props) => {
+    const { category } = props;
+    let [isOpen, setIsOpen] = useState(false);
+    let [fd, setFd] = useState({ ...category });
 
-const SingleItem = (props) => {
-    const { id } = props;
-    const [category, setCategory] = useState(null);
-
-    useEffect(() => {
-        axios.get(`/api/category/${id}`).then(res => {
-            setCategory(res.data);
-        }).catch(err => {
-            console.log(err.message);
-        });
-    }, [id])
-
-    if (!category) {
-        return (
-            <div className="">
-                <div className="flex justify-center p-2 border">
-                    <span className="text-xs text-red-600">Invalid id</span>
-                </div>
-            </div>
-        );
+    const handleSubmit = () => {
+        // 
     }
-
     return (
-        <div className="">
-            <div className="flex justify-between p-2 border">
-                <h4 className="text-3xl text-slate-400 capitalize">{category.name}</h4>
-                <button onClick={() => props.setView({ screen: 'list', target_id: '' })} className='py-2 px-4 bg-pink-600 text-white'>Cancel</button>
-
-            </div>
-        </div>
-    )
+        <>
+            <button
+                className='py-1 px-2 text-xs font-bold bg-pink-600 text-white'
+                onClick={() => setIsOpen(true)}
+            >
+                Edit
+            </button>
+            <Dialog
+                header=""
+                visible={isOpen}
+                onHide={() => setIsOpen(false)}
+                className="bg-white px-4 py-3 rounded-md w-full md:w-1/2 mx-2 md:mx-auto"
+            >
+                <div>
+                    <div className="flex justify-between p-2">
+                        <h4 className="text-2xl text-slate-400 capitalize">Edit Category</h4>
+                    </div>
+                    <hr />
+                    <div className="p-2">
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                            <div className="">
+                                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                                    Name
+                                </label>
+                                <div className="mt-1">
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value={fd.name}
+                                        onChange={(e) => setFd({ ...fd, name: e.target.value })}
+                                        required
+                                        className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    />
+                                </div>
+                            </div>
+                            <div>
+                                <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+                                    Description
+                                </label>
+                                <div className="mt-1">
+                                    <textarea
+                                        name="description"
+                                        value={fd.description}
+                                        onChange={(e) => setDescription({ ...fd, description: e.target.value })}
+                                        rows="2"
+                                        className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </Dialog>
+        </>
+    );
 
 }
 
+const CreateItem = (props) => {
+    let [isOpen, setIsOpen] = useState(false);
 
-const AddNewForm = (props) => {
-    let [categories, setCategories] = useState(null);
-    let [isLoading, setIsLoading] = useState(true);
+    return (
+        <>
+            <button
+                className='py-2 px-4 bg-pink-600 text-white'
+                onClick={() => setIsOpen(true)}
+            >
+                Create
+            </button>
+            <Dialog
+                header=""
+                visible={isOpen}
+                onHide={() => setIsOpen(false)}
+                className="bg-white px-4 py-3 rounded-md w-full md:w-1/2 mx-2 md:mx-auto"
+            >
+                <AddNewForm {...props} />
+            </Dialog>
+        </>
+    );
 
-    const [name, setName] = useState('');
-    const [description, setDescription] = useState('');
-    const [image, setImage] = useState(null);
-    const [icon, setIcon] = useState(null);
-    const [parentId, setParentId] = useState('');
-    const [isRoot, setIsRoot] = useState(false);
-    const [active, setActive] = useState(false);
-    const [message, setMessage] = useState('');
-    const [imagePreview, setImagePreview] = useState(null);
-    const [iconPreview, setIconPreview] = useState(null);
-    const imageInputRef = useRef();
-    const iconInputRef = useRef();
+}
 
-    const getCategories = () => {
-        setIsLoading(true);
-        axios.get(`/api/categories`)
-            .then(res => {
-                setCategories(res.data);
-                setIsLoading(false);
-            })
-            .catch(err => {
-                setIsLoading(false);
-            });
-    }
-    useEffect(() => {
-        getCategories();
-    }, []);
+const DeleteItem = (props) => {
 
-    const onImageChange = (event, type = 'image') => {
-        const file = event.target.files[0];
-        if (type == 'icon') {
-            setIcon(file);
-        } else if (type == 'image') {
-            setImage(file);
-        }
 
-        const reader = new FileReader();
-
-        reader.onloadend = () => {
-            if (type == 'icon') {
-                setIconPreview(reader.result);
-            } else if (type == 'image') {
-                setImagePreview(reader.result);
-            }
-        };
-        reader.readAsDataURL(file);
+    const accept = () => {
+        // 
     };
 
-    const removePreview = (type) => {
-        if (type == 'image') {
-            setImage(null);
-            setImagePreview(null);
-            imageInputRef.current.value = '';
-        } else if (type == 'icon') {
-            setIcon(null);
-            setIconPreview(null);
-            iconInputRef.current.value = '';
-        }
-    }
+    const reject = () => {
+        // 
+    };
 
-    const onSubmit = async (event) => {
-        event.preventDefault();
-
-        const formData = new FormData();
-        formData.append('name', name);
-        formData.append('description', description);
-        formData.append('image', image);
-        formData.append('icon', icon);
-        formData.append('parent_id', parentId);
-        formData.append('is_root', isRoot ? 1 : 0);
-        formData.append('active', active ? 1 : 0);
-
-        try {
-            const response = await axios.post('/category/store', formData);
-            setMessage(response.data.message);
-            getCategories();
-            props.setView({ screen: 'list', target_id: '' })
-        } catch (error) {
-            setMessage(error.response.data.message);
-        }
+    const confirm = (event) => {
+        confirmPopup({
+            target: event.currentTarget,
+            message: 'Are you sure you want to proceed?',
+            icon: 'pi pi-exclamation-triangle',
+            defaultFocus: 'reject',
+            accept,
+            reject
+        });
     };
 
     return (
-        <div className="">
-            <div className="flex justify-between p-2 border">
-                <h4 className="text-3xl text-slate-400 capitalize">Create New</h4>
-                <button onClick={() => props.setView({ screen: 'list', target_id: '' })} className='py-2 px-4 bg-pink-600 text-white'>Cancel</button>
+        <>
+            <ConfirmPopup className='border p-4 bg-white shadow-md'/>
+            <div className="flex flex-wrap gap-2 justify-content-center">
+                <Button onClick={confirm} icon="pi pi-times" label="Delete" className="p-button-danger"></Button>
             </div>
-            <div className="p-2 border">
-                <form onSubmit={onSubmit} className="space-y-6">
-                    <div>
-                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                            Name
-                        </label>
-                        <div className="mt-1">
-                            <input
-                                type="text"
-                                name="name"
-                                value={name}
-                                onChange={(event) => setName(event.target.value)}
-                                required
-                                className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            />
-                        </div>
-                    </div>
-
-                    <div>
-                        <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-                            Description
-                        </label>
-                        <div className="mt-1">
-                            <textarea
-                                name="description"
-                                value={description}
-                                onChange={(event) => setDescription(event.target.value)}
-                                rows="3"
-                                className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            />
-                        </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 items-start">
-                        <div>
-                            <label htmlFor="image" className="block text-sm font-medium text-gray-700">
-                                Image
-                            </label>
-                            <div className="mt-1">
-                                <input
-                                    type="file"
-                                    name="image"
-                                    onChange={(e) => onImageChange(e, 'image')}
-                                    ref={imageInputRef}
-                                    required
-                                    className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                />
-                            </div>
-                            {imagePreview && (
-                                <div id="imagePreview" className="mt-2 relative">
-                                    <img src={imagePreview} alt="Image preview" className="w-1/3 h-auto rounded-md" />
-                                    <div className="absolute top-2 right-2" onClick={() => removePreview('image')}>
-                                        <IoMdCloseCircleOutline className='w-8 h-8' />
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-
-                        <div>
-                            <label htmlFor="icon" className="block text-sm font-medium text-gray-700">
-                                Icon
-                            </label>
-                            <div className="mt-1">
-                                <input
-                                    type="file"
-                                    name="icon"
-                                    onChange={(e) => onImageChange(e, 'icon')}
-                                    ref={iconInputRef}
-                                    className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                />
-                            </div>
-                            {iconPreview && (
-                                <div id="iconPreview" className="mt-2 relative">
-                                    <img src={iconPreview} alt="Icon preview" className="w-1/3 h-auto rounded-md" />
-                                    <div className="absolute top-2 right-2" onClick={() => removePreview('icon')}>
-                                        <IoMdCloseCircleOutline className='w-8 h-8' />
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-3  gap-2 items-start">
-
-                        <div>
-                            <div className="flex items-center">
-                                <input
-                                    id="is_root"
-                                    name="is_root"
-                                    type="checkbox"
-                                    checked={isRoot}
-                                    onChange={(event) => {
-                                        setIsRoot(event.target.checked);
-                                    }}
-                                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                                />
-                                <label htmlFor="is_root" className="ml-2 block text-sm font-medium text-gray-700">
-                                    Is Root
-                                </label>
-                            </div>
-
-                        </div>
-
-                        <div>
-                            <div className="flex items-center">
-                                <input
-                                    id="active"
-                                    name="active"
-                                    type="checkbox"
-                                    checked={active}
-                                    onChange={(event) => setActive(event.target.checked)}
-                                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                                />
-                                <label htmlFor="active" className="ml-2 block text-sm font-medium text-gray-700">
-                                    Active
-                                </label>
-                            </div>
-                        </div>
-                        {!isRoot &&
-                            <div>
-                                <label htmlFor="parent_id" className="block text-sm font-medium text-gray-700">
-                                    Parent ID
-                                </label>
-                                <select
-                                    name="parent_id"
-                                    value={parentId}
-                                    onChange={(event) => setParentId(event.target.value)}
-                                    className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                >
-                                    <option value="">Select a parent category</option>
-                                    {categories && categories.data.map(category => (
-                                        <option key={category.id} value={category.id}>{category.name}</option>
-                                    ))}
-                                </select>
-                            </div>
-                        }
-                    </div>
-                    <div>
-                        <button
-                            type="submit"
-                            className="w-full p-2 text-lg font-semibold text-white uppercase bg-indigo-500 border border-transparent rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-700 focus:ring-indigo-800 active:bg-indigo-800"
-                        >
-                            Submit
-                        </button>
-                    </div>
-
-                    {message && (
-                        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-                            <strong className="font-bold">Success!</strong>
-                            <span className="block sm:inline">{message}</span>
-                        </div>
-                    )}
-                </form>
-            </div>
-        </div>
-    )
+        </>
+    );
 }

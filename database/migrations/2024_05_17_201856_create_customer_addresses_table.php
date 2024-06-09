@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('landmark')->nullable();
             $table->string('city')->nullable();
             $table->string('pin')->nullable();
-            $table->enum('type', ['office', 'home', 'adda_point']);
+            $table->enum('type', ['office', 'home', 'adda_point','other']);
             $table->boolean('is_active')->default(0);
             $table->timestamps();
         });

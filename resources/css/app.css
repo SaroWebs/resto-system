@@ -2,4 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+.p-component-overlay {
+    background: #000000cf;
+}
 
+.p-confirm-popup-footer {
+    display: flex;
+    gap: 1rem;
+}
+
+.p-button.p-component {
+    border: 1px solid gray;
+    padding: 0 1rem;
+}

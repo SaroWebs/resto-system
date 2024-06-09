@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('calories')->nullable();
             $table->text('ingredients')->nullable();
             $table->integer('cooking_time')->nullable();
+            $table->boolean('active')->default(0);
             $table->timestamps();
         });
     }

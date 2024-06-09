@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('image_url');
             $table->string('link')->nullable();
-            $table->enum('type',['header', 'advertisement', 'offer', 'promotional','special_offer']);
+            $table->enum('type',['header', 'advertisement', 'offer', 'promotional','special_offer'])->default('offer');
             $table->timestamps();
         });
     }
