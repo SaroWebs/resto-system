@@ -20,7 +20,3 @@ Route::get('/seat/{id}', [SeatController::class, 'get_item']);
 // banner, review(menu_id)
 // secured individual user
 // personal info, reservation, notification, cart,  order
-
-// system
-
-Route::get('/getproducts', [MenuController::class, 'get_products']);

@@ -2,13 +2,21 @@ import CardStat from '@/Components/Wizard/CardStat';
 import MainLayout from '@/Layouts/MainLayout';
 import { Head } from '@inertiajs/react';
 
+const formatNumber = (n) => {
+    if (n > 1000000000) return (n / 1000000000).toFixed(1) + 'b';
+    if (n > 1000000) return (n / 1000000).toFixed(1) + 'm';
+    if (n > 1000) return (n / 1000).toFixed(1) + 'k';
+    return n;
+}
+
 export default function Dashboard(props) {
+    const {customers, products, profit, views}=props.stats;
     return (
         <MainLayout {...props}>
             <Head title="Dashboard" />
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-6">
-                <CardStat title="Total views" total="$3.456K" rate="0.43%" levelUp>
+                <CardStat title="Total views" total={formatNumber(views)} rate="0.43%" levelUp>
                     <svg
                         className="fill-blue-600"
                         width="22"
@@ -28,7 +36,7 @@ export default function Dashboard(props) {
                     </svg>
                 </CardStat>
 
-                <CardStat title="Total Profit" total="$45,2K" rate="4.35%" levelUp>
+                <CardStat title="Total Profit" total={formatNumber(profit)} rate="4.35%" levelUp>
                     <svg
                         className="fill-blue-600"
                         width="20"
@@ -52,7 +60,7 @@ export default function Dashboard(props) {
                     </svg>
                 </CardStat>
 
-                <CardStat title="Total Product" total="2.450" rate="2.59%" levelUp>
+                <CardStat title="Total Product" total={formatNumber(products)} rate="2.59%" levelUp>
                     <svg
                         className="fill-blue-600"
                         width="22"
@@ -72,7 +80,7 @@ export default function Dashboard(props) {
                     </svg>
                 </CardStat>
 
-                <CardStat title="Total Users" total="3.456" rate="0.95%" levelDown>
+                <CardStat title="Total Users" total={formatNumber(customers)} rate="0.95%" levelDown>
                     <svg
                         className="fill-blue-600"
                         width="22"
@@ -96,7 +104,6 @@ export default function Dashboard(props) {
                     </svg>
                 </CardStat>
             </div>
-            {/* to use chart get a react node package */}
         </MainLayout>
     );
 }

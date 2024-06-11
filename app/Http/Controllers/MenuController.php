@@ -65,43 +65,70 @@ class MenuController extends Controller
     }
 
 
-
-    public function get_products(Request $request){   
+    public function get_items(Request $request)
+    {
         $order = $request->input('order', 'asc');
         $order_by = $request->input('order_by', 'name');
         $per_page = $request->input('per_page', 50);
-        $search = $request->input('search','');
-        $cat_id = $request->input('category_id','');
-       
+        $search = $request->input('search', '');
+        $cat_id = $request->input('category_id', '');
+
         $query = Menu::query();
+        // only the active products for application
+        $query->where('active', 1);
 
         if (!empty($search)) {
-            $query->where('name','like','%'.$search.'%')
-                ->orWhere('description','like','%'.$search.'%');
+            $query->where('name', 'like', '%' . $search . '%')
+                ->orWhere('description', 'like', '%' . $search . '%');
         }
         if (!empty($cat_id)) {
             $query->where('category_id', $cat_id);
         }
-        
+
         $query->orderBy($order_by, $order);
 
         $m = $query->with('images')->paginate($per_page);
         return response()->json($m);
     }
 
-    public function get_items(Request $request){   
-        // order, limit, page, pagination 
-        $m = Menu::with('images')->paginate(50);
-        return response()->json($m);
-    }
     
-    public function get_items_by_category(Request $request, $cid){   
-        $m = Menu::with('images')->where('category_id', $cid)->paginate(50);
-        return response()->json($m);
-    }
-    
-    public function get_item($id){    
+    public function get_item($id)
+    {
         $m = Menu::with('images')->find($id);
+        if($m->active){
+            return response()->json($m);
+        }else{
+            return response()->json(null);
+        }
+
+    }
+
+    // system
+    public function get_products(Request $request)
+    {
+        $order = $request->input('order', 'asc');
+        $order_by = $request->input('order_by', 'name');
+        $per_page = $request->input('per_page', 50);
+        $search = $request->input('search', '');
+        $cat_id = $request->input('category_id', '');
+
+        $query = Menu::query();
+
+
+        if (!empty($search)) {
+            $query->where('name', 'like', '%' . $search . '%')
+                ->orWhere('description', 'like', '%' . $search . '%');
+        }
+
+        if (!empty($cat_id)) {
+            $query->where('category_id', $cat_id);
+        }
+
+        $query->orderBy($order_by, $order);
+
+        $m = $query->with('images')->paginate($per_page);
         return response()->json($m);
     }
+
+
 }
