@@ -6,8 +6,7 @@ import { useState } from 'react';
 import { IoMdCloseCircleOutline } from 'react-icons/io';
 
 const AddNewForm = (props) => {
-    const {setIsOpen}=props;
-    let [categories, setCategories] = useState(null);
+    const { setIsOpen, categories, reload } = props;
     let [isLoading, setIsLoading] = useState(true);
 
     const [name, setName] = useState('');
@@ -23,21 +22,7 @@ const AddNewForm = (props) => {
     const imageInputRef = useRef();
     const iconInputRef = useRef();
 
-    const getCategories = () => {
-        setIsLoading(true);
-        axios.get(`/api/categories`)
-            .then(res => {
-                setCategories(res.data);
-                setIsLoading(false);
-                setIsOpen(false);
-            })
-            .catch(err => {
-                setIsLoading(false);
-            });
-    }
-    useEffect(() => {
-        getCategories();
-    }, []);
+
 
     const onImageChange = (event, type = 'image') => {
         const file = event.target.files[0];
@@ -83,13 +68,16 @@ const AddNewForm = (props) => {
         formData.append('is_root', isRoot ? 1 : 0);
         formData.append('active', active ? 1 : 0);
 
+
         try {
             const response = await axios.post('/category/store', formData);
             setMessage(response.data.message);
-            getCategories();
+            reload();
+            setIsOpen(false);
         } catch (error) {
             setMessage(error.response.data.message);
         }
+
     };
 
     return (
