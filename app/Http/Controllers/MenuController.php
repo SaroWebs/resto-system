@@ -61,7 +61,9 @@ class MenuController extends Controller
      */
     public function destroy(Menu $menu)
     {
-        //
+        // delete photos later from MenuImage
+        if ($menu->delete()) return response()->json("deleted");
+        return response()->json("not deleted");
     }
 
 
@@ -87,48 +89,18 @@ class MenuController extends Controller
 
         $query->orderBy($order_by, $order);
 
-        $m = $query->with('images')->paginate($per_page);
+        $m = $query->with(['images', 'category'])->paginate($per_page);
         return response()->json($m);
     }
 
-    
+
     public function get_item($id)
     {
         $m = Menu::with('images')->find($id);
-        if($m->active){
+        if ($m->active) {
             return response()->json($m);
-        }else{
+        } else {
             return response()->json(null);
         }
-
     }
-
-    // system
-    public function get_products(Request $request)
-    {
-        $order = $request->input('order', 'asc');
-        $order_by = $request->input('order_by', 'name');
-        $per_page = $request->input('per_page', 50);
-        $search = $request->input('search', '');
-        $cat_id = $request->input('category_id', '');
-
-        $query = Menu::query();
-
-
-        if (!empty($search)) {
-            $query->where('name', 'like', '%' . $search . '%')
-                ->orWhere('description', 'like', '%' . $search . '%');
-        }
-
-        if (!empty($cat_id)) {
-            $query->where('category_id', $cat_id);
-        }
-
-        $query->orderBy($order_by, $order);
-
-        $m = $query->with('images')->paginate($per_page);
-        return response()->json($m);
-    }
-
-
 }

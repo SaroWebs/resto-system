@@ -51,7 +51,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/product/{menu}', 'destroy');
         
         // data
-        Route::get('/getproducts', 'get_products');
+        Route::get('/getproducts', 'get_items');
     });
     
 
@@ -60,7 +60,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/category/store', 'store');
         Route::put('/category/{id}/update', 'update');
         Route::put('/category/{category}/updatestatus', 'updateStatus');
-        Route::delete('/category/{id}', 'destroy');
+        Route::delete('/category/{category}', 'destroy');
     });
 });
 

@@ -2,14 +2,13 @@ import MainLayout from '@/Layouts/MainLayout';
 import { Dialog } from 'primereact/dialog'
 import { Head } from '@inertiajs/react';
 import axios from 'axios';
-import React, { useEffect, useRef, useState } from 'react'
-import { IoMdCloseCircleOutline } from "react-icons/io";
+import React, { useEffect, useState } from 'react'
 import AddNewForm from './AddNewForm';
 import { ConfirmPopup, confirmPopup } from 'primereact/confirmpopup';
 import { Button } from 'primereact/button';
 import EditItem from './EditItem';
 
-const CategoriesList = (props) => {
+const List = (props) => {
 
     let [categories, setCategories] = useState([]);
     let [isLoading, setIsLoading] = useState(true);
@@ -47,7 +46,7 @@ const CategoriesList = (props) => {
                 <div className="">
                     <div className="flex justify-between p-2 border">
                         <h4 className="text-3xl text-slate-400">Categories</h4>
-                        <CreateItem categories={categories} reload={getCategories}/>
+                        <CreateItem categories={categories} reload={getCategories} />
                     </div>
 
 
@@ -79,12 +78,12 @@ const CategoriesList = (props) => {
                                                     <img className='w-8' src={category.icon_url} alt="" />
                                                 </td>
                                                 <td className='text-center'>
-                                                    {category.parent_id ? categories.data.filter(cat => cat.id == category.id)[0].name : ""}
+                                                    {category.parent_id ? categories.data.filter(cat => cat.id == category.parent_id)[0].name : ""}
                                                 </td>
                                                 <td className='flex gap-2 text-sm justify-center items-center py-2'>
                                                     <Switcher is_active={category.active} handleToggle={() => handleToggle(category.id)} />
-                                                    <EditItem category={category} reload={getCategories}/>
-                                                    <DeleteItem category={category} reload={getCategories}/>
+                                                    <EditItem category={category} reload={getCategories} />
+                                                    <DeleteItem category={category} reload={getCategories} />
                                                 </td>
                                             </tr>
                                         ))}
@@ -105,7 +104,7 @@ const CategoriesList = (props) => {
     )
 }
 
-export default CategoriesList
+export default List
 
 
 
@@ -138,7 +137,7 @@ const CreateItem = (props) => {
                 onHide={() => setIsOpen(false)}
                 className="bg-white px-4 py-3 rounded-md w-full md:w-1/2 mx-2 md:mx-auto"
             >
-                <AddNewForm {...props} setIsOpen={setIsOpen}/>
+                <AddNewForm {...props} setIsOpen={setIsOpen} />
             </Dialog>
         </>
     );
@@ -146,15 +145,23 @@ const CreateItem = (props) => {
 }
 
 const DeleteItem = (props) => {
+    const { category, reload } = props;
+    const removeItem = () => {
+        axios.delete(`/category/${category.id}`)
+            .then(res => {
+                reload();
+                console.log(res);
+            }).catch(err => {
+                console.log(err.message);
+            })
+    }
 
 
     const accept = () => {
-        // 
+        removeItem();
     };
 
-    const reject = () => {
-        // 
-    };
+    const reject = () => { };
 
     const confirm = (event) => {
         confirmPopup({

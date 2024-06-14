@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
@@ -96,7 +98,7 @@ class CategoryController extends Controller
         }
         $category->active = $request->active ? 0 : 1;
         $category->update();
-        return response()->json(["message" => "Updated", 'cat'=> $category], 200);
+        return response()->json(["message" => "Updated", 'cat' => $category], 200);
     }
 
     /**
@@ -104,8 +106,26 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        
+        $imageUrl = $category->image_url;
+        $iconUrl = $category->icon_url;
+        $categoryDeleted = $category->delete();
+
+        if ($categoryDeleted) {
+            if ($imageUrl) {
+                $imagePath = str_replace('storage/', 'public/', $imageUrl);
+                Storage::delete($imagePath);
+            }
+            if ($iconUrl) {
+                $iconPath = str_replace('storage/', 'public/', $iconUrl);
+                Storage::delete($iconPath);
+            }
+            return response()->json(['message' => "Item deleted"], 200);
+        } else {
+            return response()->json(['message' => "Item cannot be deleted"], 500);
+        }
     }
+
 
     public function get_items()
     {
