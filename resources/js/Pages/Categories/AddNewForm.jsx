@@ -87,6 +87,11 @@ const AddNewForm = (props) => {
             </div>
             <hr />
             <div className="p-2">
+                {message && (
+                    <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                        <span className="block sm:inline">{message}</span>
+                    </div>
+                )}
                 <form onSubmit={onSubmit} className="space-y-6">
                     <div>
                         <label htmlFor="name" className="block text-sm font-medium text-gray-700">
@@ -228,12 +233,7 @@ const AddNewForm = (props) => {
                         </button>
                     </div>
 
-                    {message && (
-                        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-                            <strong className="font-bold">Success!</strong>
-                            <span className="block sm:inline">{message}</span>
-                        </div>
-                    )}
+
                 </form>
             </div>
         </div>
