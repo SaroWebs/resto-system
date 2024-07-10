@@ -23,9 +23,6 @@ const ProductList = (props) => {
     }, []);
 
 
-
-
-
     return (
         <MainLayout {...props}>
             <Head title="Categories" />
@@ -33,7 +30,7 @@ const ProductList = (props) => {
                 <div className="">
                     <div className="flex justify-between p-2 border">
                         <h4 className="text-3xl text-slate-400">Menu Items</h4>
-                        <AddNew products={products} reload={get_products} />
+                        <AddNew reload={get_products} {...props} />
                     </div>
                     <div className="p-2 border">
                         <div className="filter py-2"></div>
@@ -54,7 +51,7 @@ const ProductList = (props) => {
                                             <th></th>
                                         </tr>
                                     </thead>
-                                    <tbody> {products.data.map((item, i) => <ListItem index={i} item={item} getItems={get_products}/> )} </tbody>
+                                    <tbody> {products.data.map((item, i) => <ListItem index={i} item={item} getItems={get_products} />)} </tbody>
                                 </table>
                                 <div className="pagination py-2"></div>
                             </div>
@@ -73,7 +70,10 @@ const ProductList = (props) => {
 export default ProductList
 
 const AddNew = (props) => {
+    let { categories } = props;
     let [isOpen, setIsOpen] = useState(false);
+
+    
     return (
         <>
             <button

@@ -34,7 +34,7 @@ Route::get('/', function () {
 Route::middleware('auth')->group(function () {
 
     Route::controller(RegisteredUserController::class)->group(function () {
-        Route::get('/dashboard', 'dashboard')->name('Dashboard');
+        Route::get('/dashboard', 'dashboard')->name('dashboard');
         Route::get('/admin', 'dashboard')->name('admin');
         Route::get('/home', 'dashboard')->name('home');
     });

@@ -62,7 +62,6 @@ const List = (props) => {
                                             <th>Image</th>
                                             <th>Name</th>
                                             <th>Icon</th>
-                                            <th>Parent</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -74,15 +73,14 @@ const List = (props) => {
                                                     <img className='w-12' src={category.image_url} alt="" />
                                                 </td>
                                                 <td className='text-center'>{category.name}</td>
-                                                <td className='flex justify-center items-start'>
-                                                    <img className='w-8' src={category.icon_url} alt="" />
+                                                <td className=''>
+                                                    <div className="flex justify-center items-center">
+                                                        <img className='w-8' src={category.icon_url} alt="" />
+                                                    </div>
                                                 </td>
-                                                <td className='text-center'>
-                                                    {category.parent_id ? categories.data.filter(cat => cat.id == category.parent_id)[0].name : ""}
-                                                </td>
+
                                                 <td className='flex gap-2 text-sm justify-center items-center py-2'>
                                                     <Switcher is_active={category.active} handleToggle={() => handleToggle(category.id)} />
-                                                    <EditItem category={category} reload={getCategories} />
                                                     <DeleteItem category={category} reload={getCategories} />
                                                 </td>
                                             </tr>
@@ -146,6 +144,7 @@ const CreateItem = (props) => {
 
 const DeleteItem = (props) => {
     const { category, reload } = props;
+    
     const removeItem = () => {
         axios.delete(`/category/${category.id}`)
             .then(res => {
